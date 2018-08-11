@@ -11,12 +11,7 @@ public final class R {
     public static final class attr {
     }
     public static final class drawable {
-        public static final int bd=0x7f020000;
-        public static final int bj=0x7f020001;
-        public static final int bk=0x7f020002;
-        public static final int bp=0x7f020003;
-        public static final int bs=0x7f020004;
-        public static final int bv=0x7f020005;
+        public static final int bk=0x7f020000;
     }
     public static final class string {
         public static final int app_name=0x7f030000;
