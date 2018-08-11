@@ -54,6 +54,18 @@ public class SachoveView extends View
 	int mFieldFrom;
 	int mFieldTo;
 
+	private Paint bila;
+
+	private Paint blue;
+
+	private Paint green;
+
+	private Paint white;
+
+	private Paint black;
+
+	private Paint cerna;
+
 	protected boolean hrajeClovek()
 	{
 		return !isPremyslim() && (mBilyClovek && mTask.mBoardComputing.bily ||
@@ -72,13 +84,14 @@ public class SachoveView extends View
         setFocusable(true);
         mFigury = new CharSequence[6];
         mFigury[0] = "p";
-        mFigury[1] = "r";
-        mFigury[2] = "s";
-        mFigury[3] = "b";
+        mFigury[1] = "n";
+        mFigury[2] = "b";
+        mFigury[3] = "r";
         mFigury[4] = "q";
         mFigury[5] = "k";
 
         pripravTahHned();
+		initPoint();
     }
 
     public void pripravTah()
@@ -174,6 +187,38 @@ public class SachoveView extends View
 		return true;
     }
 
+	public void initPoint(){
+		bila = new Paint();
+        bila.setARGB(255, 200, 200, 200);
+		bila.setAntiAlias(true);
+		bila.setLinearText(true);
+		bila.setTextSize(14);
+
+        cerna = new Paint();
+        cerna.setARGB(255, 100, 100, 100);
+
+
+        blue = new Paint();
+        blue.setARGB(255, 0, 0, 255);
+
+
+        green = new Paint();
+        green.setARGB(255, 0, 255, 0);
+
+
+        white = new Paint();
+        white.setARGB(255, 255, 255, 255);
+		white.setAntiAlias(true);
+		white.setLinearText(true);
+		white.setTextSize(30);
+
+        black = new Paint();
+        black.setARGB(255, 0, 0, 0);
+		black.setAntiAlias(true);
+		black.setLinearText(true);
+		black.setTextSize(30);
+	}
+	
     @Override
     protected void onDraw(Canvas canvas)
 	{
@@ -189,68 +234,59 @@ public class SachoveView extends View
    		int h = r.bottom - r.top;//canvas.getHeight() - 50;
         mPole = (w < h ? w : h);
         mPole >>= 3; //mPole /= 8;
-		
-        Paint bila = new Paint();
-        bila.setARGB(255, 200, 200, 200);
-		
-		
-        Paint cerna = new Paint();
-        cerna.setARGB(255, 100, 100, 100);
-		
-		
-        Paint modra = new Paint();
-        modra.setARGB(255, 0, 0, 255);
-		
-		
-        Paint zelena = new Paint();
-        zelena.setARGB(255, 0, 255, 0);
-		
-		
-        Paint bilaf = new Paint();
-        bilaf.setARGB(255, 255, 255, 255);
-		bilaf.setAntiAlias(true);
-		bilaf.setLinearText(true);
-		bilaf.setTextSize(30);
-		
-        Paint cernaf = new Paint();
-        cernaf.setARGB(255, 0, 0, 0);
-		cernaf.setAntiAlias(true);
-		cernaf.setLinearText(true);
-		cernaf.setTextSize(30);
+		mPole -= 3;
 		
         boolean clovek = hrajeClovek();
 
-        for (int i = 0; i < 8; i++)
-            for (int j = 0; j < 8; j++)
+		canvas.drawRect(new Rect(r.top,r.left,9* mPole,r.right),white);
+		
+        for (int column = 0; column < 8; column++)
+            for (int line = 0; line < 8; line++)
 			{
             	Paint p;
-            	if (clovek && mox == i && moy == j)
+            	if (clovek && mox == column && moy == line)
 				{
-            		p = zelena;
+            		p = green;
             	}
 				else
-            	if (clovek && mcx == i && mcy == j)
+            	if (clovek && mcx == column && mcy == line)
 				{
-            		p = modra;
+            		p = blue;
             	}
 				else
 				{
-            		p = ((((i + j) & 1) == 1) ? bila : cerna);
+            		p = ((((column + line) & 1) == 1) ? bila :cerna);
             	}
-            	int sx = (mOtoceno ? 7 - i : i) * mPole;
-            	int sy = (mOtoceno ? j : 7 - j) * mPole;
+				
+            	int sx = (mOtoceno ? 7 - column : column) * mPole;
+            	int sy = (mOtoceno ? line : 7 - line) * mPole;
+				
+				
+					
+				
+				
+				sx += 12;
+				sy += 12;
+				
+				if(column == 0 || column == 7)
+					canvas.drawText(String.valueOf(line + 1), column == 0 ? r.left : sx + mPole, sy + (mPole / 2), bila);
+				if(line == 0 || line == 7)
+					canvas.drawText(String.valueOf((char)(column + 65)), sx + (mPole / 2) ,line == 0 ? sy + mPole + 10 : r.top + 10 , bila);
+				
+				
+				
                 canvas.drawRect(new Rect(sx, sy, sx + mPole, sy + mPole), p);
-                byte co = sch[Pozice.a1 + i + 10 * j];
+                byte co = sch[Pozice.a1 + column + 10 * line];
 
                 if (co != 0 && co > -7 && co < 7)
 				{
 					if (co > 0)
 					{
-						canvas.drawText(mFigury[co - 1].toString().toUpperCase(), sx + 8 , sy -8 + mPole, bilaf);
+						canvas.drawText(mFigury[co - 1].toString().toUpperCase(), sx + 8 , sy -8 + mPole, white);
 					}
 					else
 					{
-						canvas.drawText(mFigury[-co - 1].toString().toUpperCase(), sx + 8, sy -8 + mPole, cernaf);
+						canvas.drawText(mFigury[-co - 1].toString().toUpperCase(), sx + 8, sy -8 + mPole, black);
 					}
 				}
 

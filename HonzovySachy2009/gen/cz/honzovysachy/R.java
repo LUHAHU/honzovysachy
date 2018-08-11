@@ -17,13 +17,6 @@ public final class R {
         public static final int bp=0x7f020003;
         public static final int bs=0x7f020004;
         public static final int bv=0x7f020005;
-        public static final int cd=0x7f020006;
-        public static final int cj=0x7f020007;
-        public static final int ck=0x7f020008;
-        public static final int cp=0x7f020009;
-        public static final int cs=0x7f02000a;
-        public static final int cv=0x7f02000b;
-        public static final int icon=0x7f02000c;
     }
     public static final class string {
         public static final int app_name=0x7f030000;
