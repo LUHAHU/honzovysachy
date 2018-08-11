@@ -1,0 +1,7 @@
+HONZOVY_SACHY Honzovy \ u016​​1achy
+FLIP_BOARD 翻转板
+MOVE 移动
+NEW_GAME 新游戏
+UNDO 撤消
+REDO 重做
+THINKING 思考......
