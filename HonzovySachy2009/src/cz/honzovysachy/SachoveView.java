@@ -1,19 +1,3 @@
-/*
- This program is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation; either version 2 of the License, or
- (at your option) any later version.
-
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
-
- You should have received a copy of the GNU General Public License along
- with this program; if not, write to the Free Software Foundation, Inc.,
- 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- */
-
 package cz.honzovysachy;
 
 import android.app.Activity;
@@ -33,6 +17,7 @@ import cz.honzovysachy.pravidla.Pozice;
 import cz.honzovysachy.pravidla.SavedTask;
 import cz.honzovysachy.pravidla.Task;
 import java.util.Vector;
+import android.graphics.Paint.FontMetrics;
 
 
 
@@ -43,6 +28,7 @@ public class SachoveView extends View
 	int mox = -1;
 	int moy = -1;
     int mPole = -1;
+	int offset =24 ;
 	boolean mOtoceno = false;
 	boolean mBilyClovek = true;
 	boolean mCernyClovek = false;
@@ -217,6 +203,7 @@ public class SachoveView extends View
 		black.setAntiAlias(true);
 		black.setLinearText(true);
 		black.setTextSize(30);
+		
 	}
 	
     @Override
@@ -234,11 +221,11 @@ public class SachoveView extends View
    		int h = r.bottom - r.top;//canvas.getHeight() - 50;
         mPole = (w < h ? w : h);
         mPole >>= 3; //mPole /= 8;
-		mPole -= 3;
+		mPole -= (offset >> 3);
 		
         boolean clovek = hrajeClovek();
 
-		canvas.drawRect(new Rect(r.top,r.left,9* mPole,r.right),white);
+		canvas.drawRect(new Rect(r.top,r.left,8* mPole + offset,r.right),white);
 		
         for (int column = 0; column < 8; column++)
             for (int line = 0; line < 8; line++)
@@ -261,18 +248,22 @@ public class SachoveView extends View
             	int sx = (mOtoceno ? 7 - column : column) * mPole;
             	int sy = (mOtoceno ? line : 7 - line) * mPole;
 				
+				sx += offset / 2;
+				sy += offset / 2;
 				
+				if(column == 0 || column == 7){
+					Rect bound = new Rect();
 					
-				
-				
-				sx += 12;
-				sy += 12;
-				
-				if(column == 0 || column == 7)
-					canvas.drawText(String.valueOf(line + 1), column == 0 ? r.left : sx + mPole, sy + (mPole / 2), bila);
-				if(line == 0 || line == 7)
-					canvas.drawText(String.valueOf((char)(column + 65)), sx + (mPole / 2) ,line == 0 ? sy + mPole + 10 : r.top + 10 , bila);
-				
+					bila.getTextBounds(String.valueOf(line),0,1,bound);
+					canvas.drawText(String.valueOf(line + 1), column == 0 ? r.left + (bound.right / 3): 8* mPole + (offset / 2) + (bound.right / 3), sy + (offset / 2), bila);
+					}
+				if(line == 0 || line == 7){
+					
+					Rect bound = new Rect();
+
+					bila.getTextBounds(String.valueOf((char)(column + 65)),0,1,bound);
+					canvas.drawText(String.valueOf((char)(column + 65)), sx + (offset / 2) ,line == 0 ? 8* mPole + (offset / 2)+ (bound.bottom - bound.top): r.top + (bound.bottom - bound.top) , bila);
+				}
 				
 				
                 canvas.drawRect(new Rect(sx, sy, sx + mPole, sy + mPole), p);
@@ -282,7 +273,10 @@ public class SachoveView extends View
 				{
 					if (co > 0)
 					{
-						canvas.drawText(mFigury[co - 1].toString().toUpperCase(), sx + 8 , sy -8 + mPole, white);
+						Rect bound = new Rect();
+
+						bila.getTextBounds(mFigury[co - 1].toString().toUpperCase(),0,1,bound);
+						canvas.drawText(mFigury[co - 1].toString().toUpperCase(), sx + (bound.right - bound.left) , sy + mPole - ((bound.bottom - bound.top) / 2), white);
 					}
 					else
 					{
@@ -291,10 +285,7 @@ public class SachoveView extends View
 				}
 
 			}
-		//CharSequence dr = mFigury[co > 0 ? 1 : 0][co > 0 ? co -1 : -co - 1];
-		//dr.setBounds(sx, sy, sx + mPole, sy + mPole);
-
-
+		
 	}
 
 

@@ -50,6 +50,8 @@ public class AktivitaSachovnice extends Activity implements MenuItem.OnMenuItemC
         S.init("cn");
         mView = new SachoveView(this, savedInstanceState);
         setContentView(mView);
+		
+		int i=android.R.style.Theme_Holo_NoActionBar      ;
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
